@@ -9,6 +9,8 @@ import {
 
 export interface RuleOptions {
   required?: boolean;
+  min?: number;
+  max?: number;
 }
 
 export function Rule(rule, options: RuleOptions = { required: true }) {
@@ -20,6 +22,12 @@ export function Rule(rule, options: RuleOptions = { required: true }) {
         rule = getClassMetadata(RULES_KEY, rule);
         if (getPropertyType(target, propertyKey).name === 'Array') {
           rule = joi.array().items(rule);
+          if (options.min) {
+            rule = rule.min(options.min);
+          }
+          if (options.max) {
+            rule = rule.max(options.max);
+          }
         } else {
           rule = joi.object(rule);
         }
